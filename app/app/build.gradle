@@ -37,13 +37,11 @@ android {
         }
     }
 
-    packagingOptions {
-        pickFirst 'lib/arm64-v8a/libFLAC.so'
-        
-        // You can also add these if other duplicate errors pop up for other libraries:
-        // pickFirst 'lib/arm64-v8a/libc++.so'
-        // pickFirst 'lib/**/*.so'
+ packagingOptions {
+        pickFirst '**/*.so'
     }
+
+
 }
 
 
