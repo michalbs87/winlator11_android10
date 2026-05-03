@@ -23,9 +23,9 @@ jobs:
       # Add this step if gradle fails with a permission error
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-        
-      - name: Build with Gradle
+      - name: Build APK
+        working-directory: ./winlator
         run: |
-          cd winlator
           chmod +x ./gradlew
           ./gradlew assembleRelease
+
