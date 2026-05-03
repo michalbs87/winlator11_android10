@@ -36,7 +36,17 @@ android {
             path 'src/main/cpp/CMakeLists.txt'
         }
     }
+
+    packagingOptions {
+        pickFirst 'lib/arm64-v8a/libFLAC.so'
+        
+        // You can also add these if other duplicate errors pop up for other libraries:
+        // pickFirst 'lib/arm64-v8a/libc++.so'
+        // pickFirst 'lib/**/*.so'
+    }
 }
+
+
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
