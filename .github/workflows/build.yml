@@ -29,7 +29,7 @@ jobs:
         working-directory: ./app # <-- Change this to ./app so it can find gradlew!
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleRelease
+          ./gradlew assembleDebug
 
       # This saves the finished APK to the workflow run so you can download it
       - name: Upload APK
