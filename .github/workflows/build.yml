@@ -6,24 +6,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # This fixes the Node 20 warning
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
         with:
-          distribution: 'zulu'
-          java-version: '17' # Winlator usually requires Java 17
-
-      - name: Make Gradle executable
+          submodules: recursive # Important if Winlator uses gladio/vortek submodules!
+          
+      - name: Set up JDK
+        uses: actions/setup-java@v4 # <-- Update this from v3 to v4
+        with:
+          java-version: '17' # Winlator usually requires 17 or 11
+          distribution: 'temurin'
+          
+      # Add this step if gradle fails with a permission error
+      - name: Make gradlew executable
         run: chmod +x ./gradlew
-
-      - name: Build APK
+        
+      - name: Build with Gradle
         run: ./gradlew assembleRelease
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Winlator-Fixed-APK
-          path: app/build/outputs/apk/release/*.apk
