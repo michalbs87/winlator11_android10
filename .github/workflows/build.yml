@@ -9,23 +9,32 @@ jobs:
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
         with:
-          submodules: recursive 
+          submodules: recursive
           
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-          
-      # Add working-directory: ./app here
-      - name: Make gradlew executable
-        working-directory: ./app
-        run: chmod +x ./gradlew
 
-      # Change working-directory from ./winlator to ./app
+      # Fix for CMake '3.22.1' not found
+      - name: Install CMake 3.22.1
+        run: echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "cmake;3.22.1"
+          
+      # Your gradlew file is inside the 'app' folder, so we use ./app
       - name: Build APK
         working-directory: ./app
         run: |
+          chmod +x ./gradlew
           ./gradlew assembleRelease
+
+      # This saves the finished APK to the workflow run so you can download it
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Winlator-Android10-APK
+          # This searches for all generated APK files inside the app folder
+          path: app/**/*.apk
