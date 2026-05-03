@@ -7,29 +7,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true 
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: "17"
+          distribution: "temurin"
 
       # Fix for CMake '3.22.1' not found
       - name: Install CMake 3.22.1
         run: echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "cmake;3.22.1"
-          
+
       # Your gradlew file is inside the 'app' folder, so we use ./app
       - name: Build APK
-        working-directory: ./app
+        working-directory: ./app # <-- Change this to ./app so it can find gradlew!
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleRelease
 
       # This saves the finished APK to the workflow run so you can download it
       - name: Upload APK
